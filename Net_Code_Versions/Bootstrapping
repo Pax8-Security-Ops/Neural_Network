@@ -1,1 +1,38 @@
+import numpy                                              # Using python to accomadate order of operations and numerical functions
+import pandas                                             # For reading files and depicting imported data
+import random                                             # Using python tools to generate random integers and outcomes
+from ml.Neural_Net import network as net                  # Import the pre-made code to create neural nets into this notebook
+from ml.Neural_Net import layer as lyr                    # Allow the creation and organization of layer components of which data will be fed through the neural net
+from ml.Neural_Net import activation as act_fun           # Make the function to execute the neural net usable on this notebook
+
+rawDataFrame = ("Filename_containing_data")               # Import the entire dataset as a whole with no edits"
+
+rawDataFrame
+
+np.unique(rawDataFrame["Dataset], return_counts=True)     # Convert the dataset into an array and point out what unique data points are in the assigned
+
+'''
+1= Bad Data (Malware; abnormal traffic)
+2= Good Data (Normal Traffic; clean files)
+'''
+
+badData = rawDataFrame.loc[rawDataFrame['Dataset'] == 1]  # Arrange all data points labeled with the Dataset point of '1'
+badData.iloc()                                            # Seperate the date points from the overall set to create a sample
+badData  # Display the sample"
+
+goodData = rawDataFrame.loc[rawDataFrame['Dataset'] == 2] # Arrange all data points labeled with the dataset point of '2'
+goodData.iloc()                                           # Seperate the data points from the overall set to create a new sample
+goodData # Display the sample
+
+badData.iloc[chart_position: ]                            # Extract data points starting from position 75 and downward of the SickLiver set and display the final result
+goodData.loc[chart_position: ]                            # Extract data points starting from position 25 and downward of the HealthLiver set and display the final result
+
+Features = rawDataFrame = [[""]]                          # List all desired data categories to be listed
+Target = rawDataFrame = [["Dataset"]]                     # Arrange the data points to abide by the previously stated dataset definitions: 1=Good, 2=Bad
+
+X_Train  = Features.iloc[:int(len(Features) * .9)]        # Extracting 90% of all listed data points from the 'Features' columns to be sent through a neural net
+Y_Train = Target.iloc[:int(len(Features) * .9)]           # Extracting 90 % of all listed data points from the 'Features' rows to be sent through a neural net
+
+X_Test = Features.iloc[:int(len(Features) * .9) : ]       # Extracting 90% of all listed data points from the 'Features' columns to evaluate the performance of the neural net following the training phase
+Y_Test = Target.iloc[:int(len(Features) * .9) : ]         # Extracting 90% of all listed datapoints from the 'Features' rows to evaluate the performance of the neural net following the training phase
 
