@@ -1,0 +1,75 @@
+import numpy as np                                      # Using python to accomadate order of operations and numerical functions
+import pandas as pd                                     # For reading files and depicting imported data
+import matplotlib.pyplot as plt                         # Allow visualization of graphical interfaces
+import time                                             # Allow time to be used as a place holder in graphs and measure the progression of program executions over time
+import sys                                              # Add the ability to import tools and files inside the container's directories
+
+from tqdm import tqdm                                   # Allow visualization of graphical interfaces
+from ml.Neural_Net import network as net                # Import the pre-made code to create neural nets into this notebook
+from ml.Neural_Net import layer as lyr                  # Allow the creation and organization of layer components of which data will be fed through the neural net
+from ml.Neural_Net import activation as act_fun         # Make the function to execute the neural net usable on this notebook
+
+rawDataframe = pd.read_csv("Filename_containing_data")  # Convert the data file to a CSV image and import it to the compiler
+
+rawDataframe.head()                                     # show the first lines of the file 
+
+X_Train = rawDataframe.iloc[:100 , 1:]                  # Start from the position 100, exclude the first column, and assign them act as an educational tool for training the neural net
+Y_Train = rawDataframe.iloc[:100, 0:1]                  # Subset of the data file containing all rows of the first column to act as training data for the neural net 
+
+X_Test = rawDataframe.iloc[:100, 1:]                    # Indexing the first 100 rows and the first column starting at one to feed through the net
+Y_Test = rawDataframe.iloc[:, 0:1]                      # Indexing all rows and the first column of the testing data but not index 1
+
+rawDataframe
+
+def error_function(actual, expected):
+	return(actual - expected)                       # Measuring the accuracy of the neural net's findings in proportion to the expected figures intended by the programer 
+
+dataNet = net.Network(X_Train, Y_Train)                 # Using the ml.Neural_Net code to process the training data, arranged into an x and y axis format
+
+dataNet.add_layer(lyr.Connected(500, 'sigmoid'))        # The activation function to begin the neural net's data processing, starting at 500 neurons
+                                                        # Sigmoid: Function to introduce non-linear elements or tools into the neural nets processing power 
+
+dataNet.add_layer(lyr.Connected(100, 'sigmoid'))
+
+dataNet.add_layer(lyr.Connected(30, 'sigmoid'))
+
+dataNet.add_layer(lyr.Connected(1, 'sigmoid'))
+
+dataNet.compile()
+
+dataNet.train(x_val,y_val=1, epochs=1000, cost_function error_function eval_function=None, learning_rate=.01) 
+
+'''
+dataNet: name of the neural net
+train(): Containment of the parameters which the neural net will be trained to formulate it's conclusions
+x_val: input data of the neural net's training process: Represented as X_training
+y_val = 1: Target value or output is set to one
+epochs = 1000: Statement of the amount of time the neural net will process the entire dataset
+cost_function: Determination of how much data is lost or must be lost during the training process
+error_function: Measurement of how far away the neural net's final output is to the desired target
+learning_rate=.01: 
+
+end = time.time()
+print(f'The neural Network took {round(end - start, 2)} # Statement of the amount of time the neural net takes to formulate it's conclusion
+
+history = np.array (dataNet.history)
+
+plt.scatter(history[:,0], history[:, 1], marker='.')
+plt.xlabel("Epochs")
+plt.ylabel("Score")
+plt.show()
+
+W1,W2,W3,W4 = dataNet.get_weights()
+
+error = 0  # Start the initial error margin at zero for an accurate percentage of the error function
+predictionLog = []
+for x,y in zip(np.array(X_Test), np.array(Y_Test)):
+	prediction = dataNet.forward_pass(x)
+	error += np.round(np.abs(prediction - y))
+	predictionLog.append(np.round(prediction)[0])
+
+print(f"Got {error} wrong out of {len(Y_Test)}")
+print(100 * (len(Y_Test) - error)/len(Y_Test),"%")
+
+plt.hist(predictionLog, [0,1,2])
+plt.show()
