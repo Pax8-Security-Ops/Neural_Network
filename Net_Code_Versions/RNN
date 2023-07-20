@@ -1,0 +1,93 @@
+import numpy as np
+import pandas as pd
+import matplotlib.pyplot as plt
+
+from sklearn.preprocessing import MinMaxScaler
+
+from tensorflow.keras.models import Sequential
+from tensorflow.keras.layers import Dense
+from tensorflow.keras.layers import LSTM
+from tensorflow.keras.layers import Dropout
+
+trainingData = pd.read_csv('raw_data_file.csv')
+
+trainingData = trainingData.iloc[:, 1].values
+
+numpy.ndarray
+
+scaler = MinMaxScaler()
+
+trainingData = scaler.fit_transform(trainingData.reshape(-1,1))
+
+X_trainingData = []
+Y_trainingData = []
+
+for i in range(40, len(trainingData)):
+  X_trainingData.append(trainingData(i-40:i, 0])
+  Y_trainingData.append(training[i, 0])
+
+X_trainingData = np.array(X_trainingData)
+Y_trainingData = np.array(Y_trainingData)
+
+print(X_trainingData.shape)
+print(Y_trainingData.shape)
+
+X_trainingData = np.reshape(X_trainingData, (X_trainingData.shape[0],
+                                             X_trainingData.shape[1],
+                                             1))
+
+print(X_trainingData.shape)
+rnn = Sequential()
+
+rnn.add(LSTM(units = 45, return_sequences = True, input_shape = (X_trainingData.shape[1], 1)))
+
+rnn.add(Dropout(0.2))
+
+rnn.add(LSTM(units = 45, return_sequences = True))
+
+rnn.add(Dropout(0.2))
+
+rnn.add(LSTM(units = 45, return_sequences = True))
+
+rnn.add(Dropout(0.2))
+
+for i in [True, True, False]:
+  rnn.add(LSTM(units = 45, return_sequences = i))
+  rnn.add(Dropout(0.2))
+
+rnn.add(Dense(units = 1))
+
+rnn.compile(optimizer = '', loss = '')
+rnn.compile(optimizer = 'adam', loss = 'mean_squared_error')
+
+rnn.fit(X_trainingData, Y_trainingData, epochs = 100, batch_size = 32)
+
+testData = pd.read_csv('testDatafile.csv')
+testData = testData.iloc[:, 1].values
+
+unscaledTrainingdata = pd.read_csv('rawDatafile.csv')
+unscaledTestdata = pd.read_csv('testDatafile.csv')
+allData = pd.concat((unscaled_X_trainingData['Open'], unscaledTestdata['Open']), axis = 0)
+
+X_testData = alData(len(allData - len(testData) - 40:].values
+X_testData = np.reshape(X_testData, (-1,1))
+X_testData = scalar.transform(X_testData)
+
+final_X_testData = []
+for i in range (40, len(X_testData)):
+  final_X_testData.append(X_testData[i-40:i, 0])
+final_X_testData = np.array(final_X_testData)
+
+final_X_testData = np.reshape(final_X_testData, (final_X_testData.shape[0],
+                                                 final_X_testData.shape[1],
+                                                 1))
+
+predictions = rnn.predict(final_X_testData)
+
+unscaledPredictions = scaler.inverseTransform(predictions)
+plt.clf()
+plt.plot(unscaledPredictions)
+
+plt.plot(unscaledPredictions, color = #'135485', label = "Predictions")
+plt.plot(testData, color = 'black', label = "Read Data")
+plt.title ("Machine Learning Prediction Educaton")
