@@ -2,34 +2,34 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from sklearn.preprocessing import MinMaxScaler # Scaling numerical features and differentiating them between 0 and 1 to make the machine learning model more flexible in terms of what kinds of data points it can process
+from sklearn.preprocessing import MinMaxScaler                                                # Scaling numerical features and differentiating them between 0 and 1 to make the machine learning model more flexible in terms of what kinds of data points it can process
 
-from tensorflow.keras.models import Sequential # Making "Sequential" organization an available infrastructure with which to build the neural network
-from tensorflow.keras.layers import Dense      # Simplifying the process of building layers that comprise the neural net for data to be processed
-from tensorflow.keras.layers import LSTM       # Importing the LSTM tool library to make a Recurrent Neural Net
-from tensorflow.keras.layers import Dropout    # Prevent the neural net from overfitting imported data and any fraction outputs are rounded down to zero
+from tensorflow.keras.models import Sequential                                                # Making "Sequential" organization an available infrastructure with which to build the neural network
+from tensorflow.keras.layers import Dense                                                     # Simplifying the process of building layers that comprise the neural net for data to be processed
+from tensorflow.keras.layers import LSTM                                                      # Importing the LSTM tool library to make a Recurrent Neural Net
+from tensorflow.keras.layers import Dropout                                                   # Prevent the neural net from overfitting imported data and any fraction outputs are rounded down to zero
 
-trainingData = pd.read_csv('raw_data_file.csv') # Assign the imported data to become the neural nets training data
+trainingData = pd.read_csv('raw_data_file.csv')                                               # Assign the imported data to become the neural nets training data
 
-trainingData = trainingData.iloc[:, 1].values # Extraction of values from the second column of the trainind data labeled with a 1 in their index
+trainingData = trainingData.iloc[:, 1].values                                                 # Extraction of values from the second column of the trainind data labeled with a 1 in their index
 
-numpy.ndarray                                 # Arranging the data into an array
+numpy.ndarray                                                                                 # Arranging the data into an array
 
-scaler = MinMaxScaler()                       # Activation of the scaler from sklearn and assigning it to a variable for further use
+scaler = MinMaxScaler()                                                                       # Activation of the scaler from sklearn and assigning it to a variable for further use
 
-trainingData = scaler.fit_transform(trainingData.reshape(-1,1)) # Using the scaler to reorganize the training data into a number range between -1 and 1
+trainingData = scaler.fit_transform(trainingData.reshape(-1,1))                               # Using the scaler to reorganize the training data into a number range between -1 and 1
 
 # Two empty lists with which to divide the overall training data frame 
-X_trainingData = [] # x = data input sequences to feed the neural net
-Y_trainingData = [] # y = output sequences following  data processing through the neural net
+X_trainingData = []                                                                           # x = data input sequences to feed the neural net
+Y_trainingData = []                                                                           # y = output sequences following  data processing through the neural net
 
 # Arrangement of data feautres for time-series data
 for i in range(40, len(trainingData)):
-  X_trainingData.append(trainingData(i-40:i, 0]) # Extract 40 data points to act as input for the neural net
-  Y_trainingData.append(training[i, 0])          # Extract each output devised by the neural net
+  X_trainingData.append(trainingData(i-40:i, 0])                                              # Extract 40 data points to act as input for the neural net
+  Y_trainingData.append(training[i, 0])                                                       # Extract each output devised by the neural net
 
-X_trainingData = np.array(X_trainingData) # Arrange the input sequences into an array
-Y_trainingData = np.array(Y_trainingData) # Arrange the output sequences into an array 
+X_trainingData = np.array(X_trainingData)                                                     # Arrange the input sequences into an array
+Y_trainingData = np.array(Y_trainingData)                                                     # Arrange the output sequences into an array 
 
 # Verifying the shape of the arrays
 print(X_trainingData.shape) 
@@ -40,14 +40,14 @@ X_trainingData = np.reshape(X_trainingData, (X_trainingData.shape[0],
                                              X_trainingData.shape[1],
                                              1))
 
-print(X_trainingData.shape) # Verification of new input sequence organization
-rnn = Sequential() # Activation function for the sequential neural net
+print(X_trainingData.shape)                                                                    # Verification of new input sequence organization
+rnn = Sequential()                                                                             # Activation function for the sequential neural net
 
 rnn.add(LSTM(units = 45, return_sequences = True, input_shape = (X_trainingData.shape[1], 1))) # Layer one of the LSTM layer
 
-rnn.add(Dropout(0.2)) # Perform dropout at regular intervals
+rnn.add(Dropout(0.2))                                                                          # Perform dropout at regular intervals
 
-for i in [True, True, False]: # Adding three more layers in a for loop, accompanied by dropout commands
+for i in [True, True, False]:                                                                  # Adding three more layers in a for loop, accompanied by dropout commands
   rnn.add(LSTM(units = 45, return_sequences = i))
   rnn.add(Dropout(0.2))
 
@@ -57,34 +57,41 @@ rnn.add(Dense(units = 1)) # Adding an output layer
 rnn.compile(optimizer = '', loss = '')
 rnn.compile(optimizer = 'adam', loss = 'mean_squared_error')
 
-rnn.fit(X_trainingData, Y_trainingData, epochs = 100, batch_size = 32) #Activation function for the actual 
+rnn.fit(X_trainingData, Y_trainingData, epochs = 100, batch_size = 32)                         # Activation function for the actual neural net
 
-testData = pd.read_csv('testDatafile.csv')
-testData = testData.iloc[:, 1].values
+testData = pd.read_csv('testDatafile.csv')                                                     # Importing the test data
+testData = testData.iloc[:, 1].values                                                          # Converting the data into a numPy array
 
-unscaledTrainingdata = pd.read_csv('rawDatafile.csv')
-unscaledTestdata = pd.read_csv('testDatafile.csv')
-allData = pd.concat((unscaled_X_trainingData['Open'], unscaledTestdata['Open']), axis = 0)
+print(testData.shape)                                                                          # Verify the importation and structure of the test data
 
-X_testData = alData(len(allData - len(testData) - 40:].values
-X_testData = np.reshape(X_testData, (-1,1))
-X_testData = scalar.transform(X_testData)
+plt.plot(testData)                                                                             # Visualize the test data
 
-final_X_testData = []
-for i in range (40, len(X_testData)):
+unscaledTrainingdata = pd.read_csv('raw_data_file.csv')                                        # Creating a version of the training data not converted into a numpy array
+unscaledTestdata = pd.read_csv('testDatafile.csv')                                             # Creating a version of the testing data not converted into a numpy array
+allData = pd.concat((unscaled_X_trainingData['Open'], unscaledTestdata['Open']), axis = 0)     # Concatenate both unscaled data sets into a single variable 
+
+X_testData = allData(len(allData - len(testData) - 40:].values                                 # Calculation of data by subtraction of the amount of test data starting from position 40 and the overall length of the concatenated data sets
+X_testData = np.reshape(X_testData, (-1,1))                                                    # Convert the difference to number range between -1 and 1
+X_testData = scalar.transform(X_testData)                                                      # Scale the testing data
+
+final_X_testData = []                                                                          # Collected test data goes into a single list
+for i in range (40, len(X_testData)):                                                          
   final_X_testData.append(X_testData[i-40:i, 0])
-final_X_testData = np.array(final_X_testData)
 
+final_X_testData = np.array(final_X_testData)                                                  # Arranging the testing data into an array
+
+# Arranging the test data array into a tensorflow-compatiable format
 final_X_testData = np.reshape(final_X_testData, (final_X_testData.shape[0],
                                                  final_X_testData.shape[1],
                                                  1))
 
-predictions = rnn.predict(final_X_testData)
+predictions = rnn.predict(final_X_testData)                                                    # Generation of predicted values following the neural nets activation and processing of data 
 
-unscaledPredictions = scaler.inverseTransform(predictions)
-plt.clf()
+unscaledPredictions = scaler.inverseTransform(predictions)                                     # Unscaling predicted values and re-plotting the data
+plt.clf()                                                                                      
 plt.plot(unscaledPredictions)
 
+# Visualizing the education of the neural net and displaying it's conclusions
 plt.plot(unscaledPredictions, color = #'135485', label = "Predictions")
 plt.plot(testData, color = 'black', label = "Read Data")
 plt.title ("Machine Learning Prediction Educaton")
