@@ -2,65 +2,62 @@ import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 
-from sklearn.preprocessing import MinMaxScaler
+from sklearn.preprocessing import MinMaxScaler # Scaling numerical features and differentiating them between 0 and 1 to make the machine learning model more flexible in terms of what kinds of data points it can process
 
-from tensorflow.keras.models import Sequential
-from tensorflow.keras.layers import Dense
-from tensorflow.keras.layers import LSTM
-from tensorflow.keras.layers import Dropout
+from tensorflow.keras.models import Sequential # Making "Sequential" organization an available infrastructure with which to build the neural network
+from tensorflow.keras.layers import Dense      # Simplifying the process of building layers that comprise the neural net for data to be processed
+from tensorflow.keras.layers import LSTM       # Importing the LSTM tool library to make a Recurrent Neural Net
+from tensorflow.keras.layers import Dropout    # Prevent the neural net from overfitting imported data and any fraction outputs are rounded down to zero
 
-trainingData = pd.read_csv('raw_data_file.csv')
+trainingData = pd.read_csv('raw_data_file.csv') # Assign the imported data to become the neural nets training data
 
-trainingData = trainingData.iloc[:, 1].values
+trainingData = trainingData.iloc[:, 1].values # Extraction of values from the second column of the trainind data labeled with a 1 in their index
 
-numpy.ndarray
+numpy.ndarray                                 # Arranging the data into an array
 
-scaler = MinMaxScaler()
+scaler = MinMaxScaler()                       # Activation of the scaler from sklearn and assigning it to a variable for further use
 
-trainingData = scaler.fit_transform(trainingData.reshape(-1,1))
+trainingData = scaler.fit_transform(trainingData.reshape(-1,1)) # Using the scaler to reorganize the training data into a number range between -1 and 1
 
-X_trainingData = []
-Y_trainingData = []
+# Two empty lists with which to divide the overall training data frame 
+X_trainingData = [] # x = data input sequences to feed the neural net
+Y_trainingData = [] # y = output sequences following  data processing through the neural net
 
+# Arrangement of data feautres for time-series data
 for i in range(40, len(trainingData)):
-  X_trainingData.append(trainingData(i-40:i, 0])
-  Y_trainingData.append(training[i, 0])
+  X_trainingData.append(trainingData(i-40:i, 0]) # Extract 40 data points to act as input for the neural net
+  Y_trainingData.append(training[i, 0])          # Extract each output devised by the neural net
 
-X_trainingData = np.array(X_trainingData)
-Y_trainingData = np.array(Y_trainingData)
+X_trainingData = np.array(X_trainingData) # Arrange the input sequences into an array
+Y_trainingData = np.array(Y_trainingData) # Arrange the output sequences into an array 
 
-print(X_trainingData.shape)
+# Verifying the shape of the arrays
+print(X_trainingData.shape) 
 print(Y_trainingData.shape)
 
+# Arranging the arrays into a binary classification to be compatiable with Tensorflow Tools
 X_trainingData = np.reshape(X_trainingData, (X_trainingData.shape[0],
                                              X_trainingData.shape[1],
                                              1))
 
-print(X_trainingData.shape)
-rnn = Sequential()
+print(X_trainingData.shape) # Verification of new input sequence organization
+rnn = Sequential() # Activation function for the sequential neural net
 
-rnn.add(LSTM(units = 45, return_sequences = True, input_shape = (X_trainingData.shape[1], 1)))
+rnn.add(LSTM(units = 45, return_sequences = True, input_shape = (X_trainingData.shape[1], 1))) # Layer one of the LSTM layer
 
-rnn.add(Dropout(0.2))
+rnn.add(Dropout(0.2)) # Perform dropout at regular intervals
 
-rnn.add(LSTM(units = 45, return_sequences = True))
-
-rnn.add(Dropout(0.2))
-
-rnn.add(LSTM(units = 45, return_sequences = True))
-
-rnn.add(Dropout(0.2))
-
-for i in [True, True, False]:
+for i in [True, True, False]: # Adding three more layers in a for loop, accompanied by dropout commands
   rnn.add(LSTM(units = 45, return_sequences = i))
   rnn.add(Dropout(0.2))
 
-rnn.add(Dense(units = 1))
+rnn.add(Dense(units = 1)) # Adding an output layer 
 
+# Compiling all data in the neural net
 rnn.compile(optimizer = '', loss = '')
 rnn.compile(optimizer = 'adam', loss = 'mean_squared_error')
 
-rnn.fit(X_trainingData, Y_trainingData, epochs = 100, batch_size = 32)
+rnn.fit(X_trainingData, Y_trainingData, epochs = 100, batch_size = 32) #Activation function for the actual 
 
 testData = pd.read_csv('testDatafile.csv')
 testData = testData.iloc[:, 1].values
