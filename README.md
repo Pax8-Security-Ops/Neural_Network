@@ -11,5 +11,5 @@ Devise a method to extract continuous logs from the Sumo Logic application and t
 
 ----
 ## Works Cited:
-
+McCullum, N. (2021, April 28). The ultimate guide to recurrent neural networks in python. freeCodeCamp.org. https://www.freecodecamp.org/news/the-ultimate-guide-to-recurrent-neural-networks-in-python/ 
 ---
